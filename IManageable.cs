@@ -14,5 +14,10 @@ namespace Čorbová_siemenshealth
          3. save JSON to file
          4. folder info JSON deserialization
          */
+
+        public string PrintAllExtensions();
+        public void SerializeToJSON();
+        public void SaveJSONFile(string path);
+        public void DeserializeJSON();
     }
 }
