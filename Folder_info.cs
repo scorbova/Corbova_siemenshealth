@@ -19,6 +19,10 @@ namespace Čorbová_siemenshealth
             this.fileList = new List<string>();
         }
 
+        public string FolderPath { get; set; }
+        public List<string> FolderList { get; set; }
+        public List<string> FileList { get; set; }
+
         private void AddToList(string[] entity, List<string> list)
         {
             foreach (string ent in entity)
