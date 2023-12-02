@@ -8,6 +8,20 @@ namespace Čorbová_siemenshealth
 {
     public abstract class AbstractInformation
     {
-        public string Name { get; set; }
+        private string name;
+
+        public AbstractInformation(string entity)
+        {
+            Name = entity;
+        }
+        public string Name 
+        {   
+            get => name;
+            
+            set
+            {
+                name = Path.GetFileName(value);
+            }
+        }
     }
 }
