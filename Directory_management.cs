@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Čorbová_siemenshealth
@@ -15,21 +17,25 @@ namespace Čorbová_siemenshealth
          4. folder info JSON deserialization
          */
         private string folderPath;
+        private Folder_info _folder;
+        private File_info _file;
         private HashSet<string> allExtenstions;
         public Directory_management(string path)
         {
             this.folderPath = path;
+            _folder = new Folder_info(path);
+            _file = new File_info(path);
             this.allExtenstions = new HashSet<string>();
         }
+
         public void DeserializeJSON()
         {
-            throw new NotImplementedException();
+            //_folder = JsonSerializer.Deserialize<Folder_info>(jsonString);
         }
 
         public void PrintAllExtensions()
         {
-            Folder_info _folder = new Folder_info(this.folderPath);
-
+            //if (folderPath)
             foreach (string file in _folder.FileList)
             {
                 File_info _file = new File_info(file);
@@ -40,14 +46,60 @@ namespace Čorbová_siemenshealth
             Console.WriteLine("Extensions found in folder: " + string.Join(", ", allExtenstions));
         }
 
-        public void SaveJSONFile(string path)
+        public string SaveJSONFile()
         {
-            throw new NotImplementedException();
+            Console.WriteLine("Do you want to save to JSON?");
+            string response = Console.ReadLine(); //implement precaution for different types and responses
+            response = response.ToLower();
+
+            if (response == "yes" || response == "y"){
+                Console.WriteLine("Please provide the path to JSON file");
+                string file = Console.ReadLine();
+
+                Console.WriteLine("file path: " + file);
+                
+                if (File.Exists(file))
+                {
+                    Console.WriteLine("file extension: " + Path.GetExtension(file));
+                    //i can change this after
+                    if (Path.GetExtension(file) == ".json")
+                    {
+                        File.WriteAllText(file, SerializeToJSON());
+                    }
+
+                    else
+                    {
+                        Console.WriteLine("The file provided is not a JSON file");
+                    }
+                }
+
+                else
+                {
+                    Console.WriteLine("The file provided doesn't exist");
+                }
+                //File.WriteAllText(path, path);
+            }
+
+            else if (response == "no" || response == "n"){
+
+            }
+
+            else
+            {
+                Console.WriteLine("Wrong response, try again");
+                SaveJSONFile();
+            }
+
+            return response;
         }
 
-        public void SerializeToJSON()
+        public string SerializeToJSON()
         {
-            throw new NotImplementedException();
+            
+            return JsonSerializer.Serialize(_folder);
+            //string jsonString = JsonSerializer.Serialize(_folder);
+
+            //Console.WriteLine(jsonString);
         }
     }
 }
