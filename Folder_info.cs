@@ -10,39 +10,25 @@ namespace Čorbová_siemenshealth
     {
         //information about folder: folder name (inherit from abstract class), list of all files in folder, list of all nested files
         private string folderPath;
-        private List<string> folderList;
-        private List<string> fileList;
+        //will need these variables to do try-catch and other precautions
+        private string[] folderList;
+        private string[] fileList;
         public Folder_info(string path) : base(path)
         {
             this.folderPath = path;
-            this.folderList = new List<string>();
-            this.fileList = new List<string>();
+            FolderList = AllFolders();
+            FileList = AllFiles();
         }
+        public string[] FolderList { get; set;}
+        public string[] FileList { get; set; }
 
-        public string FolderPath { get; set; }
-        public List<string> FolderList { get; set; }
-        public List<string> FileList { get; set; }
-
-        private List<string> AddToList(string[] entity, List<string> list)
+        private string[] AllFolders()
         {
-            foreach (string ent in entity)
-            {
-                list.Add(ent);
-            }
-
-            return list;
+            return Directory.GetDirectories(folderPath, "*", SearchOption.AllDirectories).Select(f => Path.GetFileName(f)).ToArray();
         }
-        public List<string> AllFolders()
+        private string[] AllFiles()
         {
-            string[] allfolders = Directory.GetDirectories(folderPath, "*", SearchOption.AllDirectories);
-
-            return AddToList(allfolders, folderList);
-        }
-        public List<string> AllFiles()
-        {
-            string[] allfiles = Directory.GetFiles(folderPath, "*.*", SearchOption.AllDirectories);
-            
-            return AddToList(allfiles, fileList);
+            return Directory.GetFiles(folderPath, "*.*", SearchOption.AllDirectories).Select(f => Path.GetFileName(f)).ToArray();
         }
     }
 }
