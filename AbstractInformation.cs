@@ -20,7 +20,7 @@ namespace Čorbová_siemenshealth
             
             set
             {
-                name = Path.GetFileName(value);
+                name = Path.GetFileNameWithoutExtension(value);
             }
         }
     }
