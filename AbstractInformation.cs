@@ -16,6 +16,8 @@ namespace Čorbová_siemenshealth
         {
             Name = entity;
         }
+
+        //String to store the required entity name
         public string Name 
         {   
             get => name;
