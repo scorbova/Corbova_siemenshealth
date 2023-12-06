@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using static System.Net.WebRequestMethods;
+using System.Text.Json.Serialization;
 
 namespace Čorbová_siemenshealth
 {
@@ -12,9 +13,15 @@ namespace Čorbová_siemenshealth
     {
         //information about files: file name (inherit from abstract class), file extension
         private string extension;
-        public File_info(string path) : base(path)
+        public File_info(string fileName) : base(fileName)
         {
-            Extension = path;
+            Extension = fileName;
+        }
+
+        [JsonConstructor]
+        public File_info(string name, string Extension) : base(name)
+        {
+            this.Extension = Extension;
         }
         public string Extension {
             get => extension;
