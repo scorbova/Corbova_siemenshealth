@@ -2,33 +2,43 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace Čorbová_siemenshealth
 {
     public class Folder_info: AbstractInformation
     {
         //information about folder: folder name (inherit from abstract class), list of all files in folder, list of all nested files
-        private string folderPath;
-        //will need these variables to do try-catch and other precautions
-        private string[] folderList;
-        private string[] fileList;
+        public string[] FolderList { get; set; }
+        public File_info[] FileList { get; set; }
+
         public Folder_info(string path) : base(path)
         {
-            this.folderPath = path;
-            FolderList = AllFolders();
-            FileList = AllFiles();
+            FolderList = AllFolders(path);
+            FileList = AllFiles(path);
         }
-        public string[] FolderList { get; set;}
-        public string[] FileList { get; set; }
 
-        private string[] AllFolders()
+        [JsonConstructor]
+        public Folder_info(string name, string[] FolderList, File_info[] FileList) : base(name)
         {
-            return Directory.GetDirectories(folderPath, "*", SearchOption.AllDirectories).Select(f => Path.GetFileName(f)).ToArray();
+            this.FolderList = FolderList;
+            this.FileList = FileList;
+            this.Name = name;
         }
-        private string[] AllFiles()
+        private string[] AllFolders(string path)
         {
-            return Directory.GetFiles(folderPath, "*.*", SearchOption.AllDirectories).Select(f => Path.GetFileName(f)).ToArray();
+            return Directory.GetDirectories(path, "*", SearchOption.AllDirectories).Select(f => Path.GetFileName(f)).ToArray();
+        }
+
+        private File_info[] AllFiles(string path)
+        {
+            string[] files = Directory.GetFiles(path, "*", SearchOption.AllDirectories);
+            File_info[] filesInfo = files.Select(f => new File_info(f)).ToArray();
+
+            return filesInfo;
         }
     }
 }
