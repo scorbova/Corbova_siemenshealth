@@ -10,12 +10,6 @@ namespace Čorbová_siemenshealth
 {
     public class Directory_management : IManageable
     {
-        /*functionality: 
-         1. print extensions
-         2. folder info serialization to JSON format
-         3. save JSON to file
-         4. folder info JSON deserialization
-         */
         private string fPath;
         private Folder_info _folder;
         private File_info _file;
@@ -29,25 +23,32 @@ namespace Čorbová_siemenshealth
 
         public void ImplementAll()
         {
-            if (File.Exists(fPath))
+            try
             {
-                if (File.ReadAllText(fPath) == "")
+                if (File.Exists(fPath))
                 {
-                    Console.WriteLine("Empty file path provided.");
-                    return;
+                    if ((string.IsNullOrWhiteSpace(File.ReadAllText(fPath))))
+                    {
+                        Console.WriteLine("Empty file path provided.");
+                        return;
+                    }
+
+                    _folder = DeserializeJSON();
                 }
 
-                _folder = DeserializeJSON();
+                else
+                {
+                    _folder = new Folder_info(fPath);
+                }
+
+                PrintAllExtensions();
+                SaveJSONFile();
             }
 
-            else
+            catch (Exception ex)
             {
-                _folder = new Folder_info(fPath);
+                Console.WriteLine("Unexpected error: " + ex.Message);
             }
-            
-            //Console.WriteLine("Got here");
-            PrintAllExtensions();
-            SaveJSONFile();
         }
         public void PrintAllExtensions()
         {
@@ -81,45 +82,58 @@ namespace Čorbová_siemenshealth
                 return null;
             }
         }
-        public string SaveJSONFile()
+
+        private void WriteJsonFile(string file)
         {
-            Console.WriteLine("Do you want to save to JSON?");
-            string response = Console.ReadLine(); //implement precaution for different types and responses
-            response = response.ToLower();
+            try
+            {
+                Console.WriteLine("Saving it...");
+                File.WriteAllText(file, SerializeToJSON());
+                Console.WriteLine("Successfully saved!");
+            }
 
-            if (response == "yes" || response == "y"){
-                Console.WriteLine("Please provide the path to JSON file");
-                string file = Console.ReadLine();
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error saving JSON file: " + ex.Message);
+            }
+        }
+        private void HandleJSONFile()
+        {
+            Console.WriteLine("Please provide the path to JSON file");
+            string file = Console.ReadLine();
 
-                if (File.Exists(file))
+            if (File.Exists(file))
+            {
+                if (Path.GetExtension(file) == ".json")
                 {
-                    //i can change this after
-                    if (Path.GetExtension(file) == ".json")
-                    {
-                        Console.WriteLine("Saving it...");
-                        File.WriteAllText(file, SerializeToJSON());
-                        Console.WriteLine("Successfully saved!");
-                    }
-
-                    else
-                    {
-                        Console.WriteLine("The file provided is not a JSON file");
-                    }
+                    WriteJsonFile(file);
                 }
 
                 else
                 {
-                    Console.WriteLine("The file provided doesn't exist");
+                    Console.WriteLine("The file provided is not a JSON file");
                 }
-            }
-
-            else if (response == "no" || response == "n"){
-
             }
 
             else
             {
-                Console.WriteLine("Wrong response, try again");
+                Console.WriteLine("The file provided doesn't exist");
+            }
+        }
+        public string SaveJSONFile()
+        {
+            Console.WriteLine("Do you want to save to JSON?");
+            string response = Console.ReadLine().ToLower();
+
+            if (response == "yes" || response == "y"){
+                HandleJSONFile();
+            }
+
+            else if (response == "no" || response == "n"){}
+
+            else
+            {
+                Console.WriteLine("Invalid response. Please enter 'yes' or 'no'.");
                 SaveJSONFile();
             }
 
