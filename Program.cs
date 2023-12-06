@@ -21,8 +21,20 @@ class Program
             {
                 break;
             }
-            Directory_management dir = new Directory_management(filePath);
-            dir.ImplementAll();
+
+            try
+            {
+                Directory_management dir = new Directory_management(filePath);
+                dir.ImplementAll();
+            }
+
+            catch (Exception e)
+            {
+                Console.WriteLine("Isn't a valid path or file format");
+            }
+
+            Console.WriteLine("\n");
+            
         }
     }
 }
