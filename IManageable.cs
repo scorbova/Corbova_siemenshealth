@@ -13,6 +13,7 @@ namespace Čorbová_siemenshealth
          2. folder info serialization to JSON format
          3. save JSON to file
          4. folder info JSON deserialization
+         5. implement all functionalities
          */
 
         public void PrintAllExtensions();
