@@ -1,23 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
-using static System.Net.WebRequestMethods;
 using System.Text.Json.Serialization;
 
 namespace Čorbová_siemenshealth
 {
     public class File_info : AbstractInformation
     {
-        //information about files: file name (inherit from abstract class), file extension
+        /*Information about files: file name (inherits from abstract class),
+         file extension - gets a file and extracts the extension*/
         private string extension;
         public File_info(string fileName) : base(fileName)
         {
             Extension = fileName;
         }
 
+        //Another construct for deserialization
         [JsonConstructor]
         public File_info(string name, string Extension) : base(name)
         {
