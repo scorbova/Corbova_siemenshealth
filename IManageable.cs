@@ -16,8 +16,9 @@ namespace Čorbová_siemenshealth
          */
 
         public void PrintAllExtensions();
-        public void SerializeToJSON();
-        public void SaveJSONFile(string path);
-        public void DeserializeJSON();
+        public string SerializeToJSON();
+        public string SaveJSONFile();
+        public Folder_info DeserializeJSON();
+        public void ImplementAll();
     }
 }
