@@ -1,19 +1,17 @@
 ﻿using Čorbová_siemenshealth;
 using System;
 using System.IO;
-using static System.Net.WebRequestMethods;
 
 class Program
 {
     static void Main(string[] args)
     {
-        // Main program
-        //string filePath = @"C:\Users\user\OneDrive\Počítač\Sofi\Job\Siemens_Healthineers\zadanie\EXAMPLEFOLDER";
-        //string filePath2 = @"C:\Users\user\OneDrive\Počítač\Sofi\Job\Siemens_Healthineers\zadanie\EXAMPLEFOLDER\myfolder.json";
         string filePath = "";
 
+        //A loop that runs indefinitely until the user inputs 'exit'
         while (true)
         {
+            //After the question user can provide path to JSON file or folder 
             Console.WriteLine("Please provide a folder or a JSON file with folder information:");
             filePath = Console.ReadLine().ToLower();
 
@@ -22,6 +20,7 @@ class Program
                 break;
             }
 
+            //Implementing functionality, handling exceptions for invalid paths or file formats
             try
             {
                 Directory_management dir = new Directory_management(filePath);
