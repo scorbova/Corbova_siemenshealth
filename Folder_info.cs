@@ -11,7 +11,8 @@ namespace Čorbová_siemenshealth
 {
     public class Folder_info: AbstractInformation
     {
-        //Information about folder: folder name (inherit from abstract class), list of all files in folder, list of all nested files
+        /*Information about folder: folder name (inherits from abstract class),
+        list of all files in folder, list of all folders*/
         
         //Arrays to store the required folder informations
         public string[] FolderList { get; set; }
