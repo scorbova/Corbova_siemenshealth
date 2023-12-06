@@ -9,6 +9,7 @@ namespace Čorbová_siemenshealth
         /*Information about files: file name (inherits from abstract class),
          file extension - gets a file and extracts the extension*/
         private string extension;
+
         public File_info(string fileName) : base(fileName)
         {
             Extension = fileName;
@@ -20,6 +21,9 @@ namespace Čorbová_siemenshealth
         {
             this.Extension = Extension;
         }
+
+
+        //String to store the required file extension
         public string Extension {
             get => extension;
 
