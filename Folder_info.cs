@@ -11,7 +11,9 @@ namespace Čorbová_siemenshealth
 {
     public class Folder_info: AbstractInformation
     {
-        //information about folder: folder name (inherit from abstract class), list of all files in folder, list of all nested files
+        //Information about folder: folder name (inherit from abstract class), list of all files in folder, list of all nested files
+        
+        //Arrays to store the required folder informations
         public string[] FolderList { get; set; }
         public File_info[] FileList { get; set; }
 
@@ -20,7 +22,8 @@ namespace Čorbová_siemenshealth
             FolderList = AllFolders(path);
             FileList = AllFiles(path);
         }
-
+        
+        //Construct for deserialization
         [JsonConstructor]
         public Folder_info(string name, string[] FolderList, File_info[] FileList) : base(name)
         {
@@ -28,11 +31,14 @@ namespace Čorbová_siemenshealth
             this.FileList = FileList;
             this.Name = name;
         }
+
+        //Retrieves all folders in a given path
         private string[] AllFolders(string path)
         {
             return Directory.GetDirectories(path, "*", SearchOption.AllDirectories).Select(f => Path.GetFileName(f)).ToArray();
         }
 
+        //Retrieves all files in a given path
         private File_info[] AllFiles(string path)
         {
             string[] files = Directory.GetFiles(path, "*", SearchOption.AllDirectories);
