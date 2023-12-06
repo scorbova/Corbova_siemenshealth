@@ -8,12 +8,12 @@ namespace Čorbová_siemenshealth
 {
     public interface IManageable
     {
-        /*functionality to inherit for more classes if needed
-         1. print extensions
-         2. folder info serialization to JSON format
-         3. save JSON to file
-         4. folder info JSON deserialization
-         5. implement all functionalities
+        /*Functionality to inherit for more classes if needed
+         1. Print extensions
+         2. Folder info serialization to JSON format
+         3. Save JSON to file
+         4. Folder info JSON deserialization
+         5. Implement all functionalities
          */
 
         public void PrintAllExtensions();
