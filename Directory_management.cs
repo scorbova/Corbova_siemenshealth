@@ -16,36 +16,71 @@ namespace Čorbová_siemenshealth
          3. save JSON to file
          4. folder info JSON deserialization
          */
-        private string folderPath;
+        private string fPath;
         private Folder_info _folder;
         private File_info _file;
-        private HashSet<string> allExtenstions;
+        private List<string> allExtenstions;
         public Directory_management(string path)
         {
-            this.folderPath = path;
-            _folder = new Folder_info(path);
-            _file = new File_info(path);
-            this.allExtenstions = new HashSet<string>();
+            this.fPath = path;
+            this._file = new File_info(path);
+            this.allExtenstions = new List<string>();
         }
 
-        public void DeserializeJSON()
+        public void ImplementAll()
         {
-            //_folder = JsonSerializer.Deserialize<Folder_info>(jsonString);
-        }
-
-        public void PrintAllExtensions()
-        {
-            //if (folderPath)
-            foreach (string file in _folder.FileList)
+            if (File.Exists(fPath))
             {
-                File_info _file = new File_info(file);
-                _file.Extension = file;
-                this.allExtenstions.Add(_file.Extension);
+                if (File.ReadAllText(fPath) == "")
+                {
+                    Console.WriteLine("Empty file path provided.");
+                    return;
+                }
+
+                _folder = DeserializeJSON();
             }
 
+            else
+            {
+                _folder = new Folder_info(fPath);
+            }
+            
+            //Console.WriteLine("Got here");
+            PrintAllExtensions();
+            SaveJSONFile();
+        }
+        public void PrintAllExtensions()
+        {
+            allExtenstions = _folder.FileList.Select(file => file.Extension).Distinct().ToList();
+           
             Console.WriteLine("Extensions found in folder: " + string.Join(", ", allExtenstions));
         }
 
+        public string SerializeToJSON()
+        {
+            if (File.Exists(fPath))
+            {
+                return JsonSerializer.Serialize(_folder);
+            }
+
+            _folder = new Folder_info(fPath);
+            return JsonSerializer.Serialize(_folder);
+        }
+        public Folder_info DeserializeJSON()
+        {
+
+            try
+            {
+                string jsonString = File.ReadAllText(fPath);                
+                return JsonSerializer.Deserialize<Folder_info>(jsonString);
+            }
+
+            catch (JsonException ex)
+            {
+                Console.WriteLine("Error during deserialization: " + ex.Message);
+                return null;
+            }
+        }
         public string SaveJSONFile()
         {
             Console.WriteLine("Do you want to save to JSON?");
@@ -56,15 +91,14 @@ namespace Čorbová_siemenshealth
                 Console.WriteLine("Please provide the path to JSON file");
                 string file = Console.ReadLine();
 
-                Console.WriteLine("file path: " + file);
-                
                 if (File.Exists(file))
                 {
-                    Console.WriteLine("file extension: " + Path.GetExtension(file));
                     //i can change this after
                     if (Path.GetExtension(file) == ".json")
                     {
+                        Console.WriteLine("Saving it...");
                         File.WriteAllText(file, SerializeToJSON());
+                        Console.WriteLine("Successfully saved!");
                     }
 
                     else
@@ -77,7 +111,6 @@ namespace Čorbová_siemenshealth
                 {
                     Console.WriteLine("The file provided doesn't exist");
                 }
-                //File.WriteAllText(path, path);
             }
 
             else if (response == "no" || response == "n"){
@@ -91,15 +124,6 @@ namespace Čorbová_siemenshealth
             }
 
             return response;
-        }
-
-        public string SerializeToJSON()
-        {
-            
-            return JsonSerializer.Serialize(_folder);
-            //string jsonString = JsonSerializer.Serialize(_folder);
-
-            //Console.WriteLine(jsonString);
         }
     }
 }
