@@ -27,9 +27,9 @@ namespace Čorbová_siemenshealth
         {
             try
             {
-                if (File.Exists(fPath) && Path.GetExtension(Path.GetFileName(fPath)) == ".json")
+                if (File.Exists(this.fPath) && Path.GetExtension(Path.GetFileName(this.fPath)) == ".json")
                 {
-                    if ((string.IsNullOrWhiteSpace(File.ReadAllText(fPath))))
+                    if ((string.IsNullOrWhiteSpace(File.ReadAllText(this.fPath))))
                     {
                         Console.WriteLine("Empty file path provided");
                         return;
@@ -40,7 +40,7 @@ namespace Čorbová_siemenshealth
 
                 else
                 {
-                    _folder = new Folder_info(fPath);
+                    _folder = new Folder_info(this.fPath);
                 }
 
                 PrintAllExtensions();
@@ -64,12 +64,12 @@ namespace Čorbová_siemenshealth
         //Serializes Folder_info object to JSON string, error handling is in method WriteJsonFile
         public string SerializeToJSON()
         {
-            if (File.Exists(fPath))
+            if (File.Exists(this.fPath))
             {
                 return JsonSerializer.Serialize(_folder);
             }
 
-            _folder = new Folder_info(fPath);
+            _folder = new Folder_info(this.fPath);
             return JsonSerializer.Serialize(_folder);
         }
 
@@ -78,7 +78,7 @@ namespace Čorbová_siemenshealth
         {
             try
             {
-                string jsonString = File.ReadAllText(fPath);                
+                string jsonString = File.ReadAllText(this.fPath);                
                 return JsonSerializer.Deserialize<Folder_info>(jsonString);
             }
 
