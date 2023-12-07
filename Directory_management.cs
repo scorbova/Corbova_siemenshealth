@@ -4,10 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace Čorbová_siemenshealth
 {
+    //This class provides functionalities related to managing directories
     public class Directory_management : IManageable
     {
         private string fPath;
@@ -21,15 +21,17 @@ namespace Čorbová_siemenshealth
             this.allExtenstions = new List<string>();
         }
 
+        /*Implements all functionalities, other methods from this class are called here
+        There is also a warning about an empty path and errors handled*/
         public void ImplementAll()
         {
             try
             {
-                if (File.Exists(fPath))
+                if (File.Exists(fPath) && Path.GetExtension(Path.GetFileName(fPath)) == ".json")
                 {
                     if ((string.IsNullOrWhiteSpace(File.ReadAllText(fPath))))
                     {
-                        Console.WriteLine("Empty file path provided.");
+                        Console.WriteLine("Empty file path provided");
                         return;
                     }
 
@@ -50,6 +52,8 @@ namespace Čorbová_siemenshealth
                 Console.WriteLine("Unexpected error: " + ex.Message);
             }
         }
+
+        //Prints all file extensions found in the folder
         public void PrintAllExtensions()
         {
             allExtenstions = _folder.FileList.Select(file => file.Extension).Distinct().ToList();
@@ -57,6 +61,7 @@ namespace Čorbová_siemenshealth
             Console.WriteLine("Extensions found in folder: " + string.Join(", ", allExtenstions));
         }
 
+        //Serializes Folder_info object to JSON string, error handling is in method WriteJsonFile
         public string SerializeToJSON()
         {
             if (File.Exists(fPath))
@@ -67,9 +72,10 @@ namespace Čorbová_siemenshealth
             _folder = new Folder_info(fPath);
             return JsonSerializer.Serialize(_folder);
         }
+
+        //Deserializes JSON string to Folder_info object
         public Folder_info DeserializeJSON()
         {
-
             try
             {
                 string jsonString = File.ReadAllText(fPath);                
@@ -83,6 +89,7 @@ namespace Čorbová_siemenshealth
             }
         }
 
+        //Writes JSON data to file
         private void WriteJsonFile(string file)
         {
             try
@@ -97,6 +104,8 @@ namespace Čorbová_siemenshealth
                 Console.WriteLine("Error saving JSON file: " + ex.Message);
             }
         }
+
+        //Handles JSON file operations, makes sure user gave a valid JSON file
         private void HandleJSONFile()
         {
             Console.WriteLine("Please provide the path to JSON file");
@@ -120,6 +129,8 @@ namespace Čorbová_siemenshealth
                 Console.WriteLine("The file provided doesn't exist");
             }
         }
+
+        //Saves JSON data to a file, user can decide if he wants to save the folder data
         public string SaveJSONFile()
         {
             Console.WriteLine("Do you want to save to JSON?");
@@ -133,7 +144,7 @@ namespace Čorbová_siemenshealth
 
             else
             {
-                Console.WriteLine("Invalid response. Please enter 'yes' or 'no'.");
+                Console.WriteLine("Invalid response. Please enter 'yes' or 'no'");
                 SaveJSONFile();
             }
 
