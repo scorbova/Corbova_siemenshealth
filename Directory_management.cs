@@ -54,9 +54,9 @@ namespace Čorbová_siemenshealth
         //Prints all file extensions found in the folder
         public void PrintAllExtensions()
         {
-            allExtenstions = _folder.FileList.Select(file => file.Extension).Distinct().ToList();
+            this.allExtenstions = _folder.FileList.Select(file => file.Extension).Distinct().ToList();
            
-            Console.WriteLine("Extensions found in folder: " + string.Join(", ", allExtenstions));
+            Console.WriteLine("Extensions found in folder: " + string.Join(", ", this.allExtenstions));
         }
 
         //Serializes Folder_info object to JSON string, error handling is in method WriteJsonFile
