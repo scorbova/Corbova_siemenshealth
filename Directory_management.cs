@@ -12,12 +12,10 @@ namespace Čorbová_siemenshealth
     {
         private string fPath;
         private Folder_info _folder;
-        private File_info _file;
         private List<string> allExtenstions;
         public Directory_management(string path)
         {
             this.fPath = path;
-            this._file = new File_info(path);
             this.allExtenstions = new List<string>();
         }
 
