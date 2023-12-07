@@ -19,18 +19,17 @@ namespace Čorbová_siemenshealth
             this.allExtenstions = new List<string>();
         }
 
-        /*Implements all functionalities, other methods from this class are called here
-        There is also a warning about an empty path and errors handled*/
-        public void ImplementAll()
+        //Handles warnings if user gives a file, returns false to not continue the program
+        private bool HandleIfFile()
         {
-            try
+            if (File.Exists(this.fPath))
             {
-                if (File.Exists(this.fPath) && Path.GetExtension(Path.GetFileName(this.fPath)) == ".json")
+                if (Path.GetExtension(Path.GetFileName(this.fPath)) == ".json")
                 {
                     if ((string.IsNullOrWhiteSpace(File.ReadAllText(this.fPath))))
                     {
                         Console.WriteLine("Empty file path provided");
-                        return;
+                        return false;
                     }
 
                     _folder = DeserializeJSON();
@@ -38,9 +37,30 @@ namespace Čorbová_siemenshealth
 
                 else
                 {
-                    _folder = new Folder_info(this.fPath);
+                    Console.WriteLine("The file provided is not a JSON file");
+                    return false;
                 }
 
+            }
+
+            else
+            {
+                _folder = new Folder_info(this.fPath);
+            }
+
+            return true;
+        }
+
+        //Implements all functionalities, other methods from this class are called here   
+        public void ImplementAll()
+        {
+            try
+            {
+                if (!HandleIfFile())
+                {
+                    return;
+                }
+                
                 PrintAllExtensions();
                 SaveJSONFile();
             }
